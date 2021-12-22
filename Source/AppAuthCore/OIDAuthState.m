@@ -432,13 +432,18 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   if (!_refreshToken) {
     [OIDErrorUtilities raiseException:kRefreshTokenRequestException];
   }
+  
+  OIDServiceConfiguration* configuration = _lastAuthorizationResponse.request.configuration? _lastAuthorizationResponse.request.configuration:_lastTokenResponse.request.configuration;
+     NSString* clientID = _lastAuthorizationResponse.request.clientID?_lastAuthorizationResponse.request.clientID:_lastTokenResponse.request.clientID;
+     NSString* clientSecret = _lastAuthorizationResponse.request.clientSecret?_lastAuthorizationResponse.request.clientSecret:_lastTokenResponse.request.clientSecret;
+    
   return [[OIDTokenRequest alloc]
-      initWithConfiguration:_lastAuthorizationResponse.request.configuration
+      initWithConfiguration:configuration
                   grantType:OIDGrantTypeRefreshToken
           authorizationCode:nil
                 redirectURL:nil
-                   clientID:_lastAuthorizationResponse.request.clientID
-               clientSecret:_lastAuthorizationResponse.request.clientSecret
+                   clientID:clientID
+               clientSecret:clientSecret
                       scope:nil
                refreshToken:_refreshToken
                codeVerifier:nil
